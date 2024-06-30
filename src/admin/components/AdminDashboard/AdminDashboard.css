@@ -1,0 +1,72 @@
+.admin-dashboard {
+  padding: 20px;
+  max-height: 100vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.add-field-button {
+  display: inline-block;
+  margin-bottom: 20px;
+  padding: 10px 20px;
+  text-align: center;
+  background-color: var(--button-bg-color);
+  color: var(--text-color);
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.add-field-button:hover {
+  background-color: var(--button-hover-bg-color);
+}
+
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  flex-grow: 1;
+}
+
+.providers-table {
+  width: 100%;
+  min-width: 900px; /* Minimum genişlik ayarlandı */
+  border-collapse: collapse;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.providers-table th, .providers-table td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.providers-table th {
+  background-color: var(--background-gradient-start);
+  color: var(--text-color);
+}
+
+.action-button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  background: none;
+  color: var(--text-color);
+  font-size: 16px;
+}
+
+.action-button:hover {
+  color: var(--button-hover-bg-color);
+}
+
+.delete-button {
+  background-color: var(--delete-button-bg-color);
+  color: var(--text-color);
+}
+
+.delete-button:hover {
+  background-color: var(--delete-button-hover-bg-color);
+}

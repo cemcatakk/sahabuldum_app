@@ -1,0 +1,54 @@
+.owner-fields {
+    padding: 20px;
+    max-width: 1500px;
+    min-width: 1000px;
+    margin: 0 auto;
+    background-color: #1e1e1e;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    color: #ffffff;
+  }
+  
+  .owner-fields h2 {
+    text-align: center;
+    color: #ff7b00;
+    margin-bottom: 20px;
+  }
+  
+  .owner-fields-table {
+    width: 100%;
+    min-width: 1000px;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .owner-fields-table th,
+  .owner-fields-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+  }
+  
+  .owner-fields-table th {
+    background-color: #ff7b00;
+    color: white;
+  }
+  
+  .owner-fields-table td {
+    background-color: #2e2e2e;
+  }
+  
+  .edit-button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #ff7b00;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .edit-button:hover {
+    background-color: #ffab40;
+  }
+  

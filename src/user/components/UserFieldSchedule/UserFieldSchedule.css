@@ -1,0 +1,81 @@
+.user-field-schedule {
+  padding: 10px;
+  margin: 0 auto;
+  background-color: #1e1e1e;
+  border-radius: 10px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  color: #ffffff;
+  width: 100%;
+  overflow-x: auto;
+}
+
+.user-field-schedule h2 {
+  text-align: center;
+  color: #ff7b00;
+  margin-bottom: 20px;
+}
+
+.date-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.date-controls button {
+  background: none;
+  border: none;
+  color: #ff7b00;
+  font-size: 20px;
+  cursor: pointer;
+  margin: 0 5px;
+}
+
+.schedule-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.schedule-table th,
+.schedule-table td {
+  padding: 5px;
+  border: 1px solid #ddd;
+  text-align: center;
+  font-size: 15px;
+}
+
+.schedule-table th {
+  background-color: #ff7b00;
+  color: white;
+  white-space: nowrap;
+}
+
+.schedule-table td {
+  background-color: #2e2e2e;
+  white-space: nowrap;
+}
+
+.hour-cell {
+  min-width: 70px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .user-field-schedule {
+      padding: 5px;
+  }
+
+  .schedule-table th,
+  .schedule-table td {
+      padding: 3px;
+      font-size: 11px;
+  }
+
+  .hour-cell {
+      min-width: 50px;
+  }
+}

@@ -1,0 +1,61 @@
+.admin-field-schedule {
+  padding: 20px;
+  margin: 0 auto;
+  background-color: #1e1e1e;
+  border-radius: 10px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  color: #ffffff;
+}
+
+.admin-field-schedule h2 {
+  text-align: center;
+  color: #ff7b00;
+  margin-bottom: 20px;
+}
+
+.admin-date-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.admin-date-controls button {
+  background: none;
+  border: none;
+  color: #ff7b00;
+  font-size: 24px;
+  cursor: pointer;
+  margin: 0 10px;
+}
+
+.admin-schedule-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.admin-schedule-table th,
+.admin-schedule-table td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+.admin-schedule-table th {
+  background-color: #ff7b00;
+  color: white;
+}
+
+.admin-schedule-table td {
+  background-color: #2e2e2e;
+}
+
+.admin-hour-cell {
+  min-height: 50px;
+  min-width: 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}

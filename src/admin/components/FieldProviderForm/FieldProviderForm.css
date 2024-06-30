@@ -1,0 +1,150 @@
+.provider-form-container {
+  margin: 0 auto;
+  border-radius: 8px;
+  color: var(--text-color);
+  background-color: rgba(24, 24, 24, 0.208);
+  padding: 20px;
+  max-width: 1500px; /* Max genişlik ayarlandı */
+}
+
+.provider-form-container h2,
+.provider-form-container h3 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.form-group {
+  flex: 1 1 calc(25% - 10px);
+  margin: 5px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--label-color);
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 8px;
+  background: var(--input-bg-color) !important;
+  color: var(--input-text-color);
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.form-group input::placeholder {
+  color: var(--input-placeholder-color);
+}
+
+.hours-container {
+  display: flex;
+  align-items: center;
+}
+
+.hours-container input {
+  width: 45%;
+  margin: 0 5px;
+}
+
+.switch-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin: 5px;
+}
+
+.switch-group label {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.add-field-button,
+.submit-button,
+.delete-button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: var(--button-bg-color);
+  color: white;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.delete-button {
+  background-color: var(--delete-button-bg-color);
+}
+
+.submit-button:hover {
+  background-color: var(--button-hover-bg-color);
+}
+
+.delete-button:hover {
+  background-color: var(--delete-button-hover-bg-color);
+}
+
+.fields-table {
+  width: 100%;
+  min-width: 1200px;
+  margin-top: 20px;
+  border-collapse: collapse;
+  table-layout: auto;
+  background-color: #f8f8f8;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.fields-table th,
+.fields-table td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.fields-table th {
+  background-color: #f2a654;
+  color: white;
+}
+
+.fields-table td {
+  background-color: #333;
+  color: #fff;
+}
+
+.form-group input,
+.form-group select,
+.fields-table input {
+  background: #555 !important;
+  color: #fff;
+}
+
+.image-thumbnails {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.thumbnail {
+  position: relative;
+  margin: 5px;
+}
+
+.thumbnail img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid #ddd;
+}
