@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FaHome, FaFutbol, FaInfoCircle, FaPhone } from 'react-icons/fa';
+import { FaHome, FaFutbol, FaInfoCircle, FaPhone, FaTools } from 'react-icons/fa';
 import './Header.css';
 import logo from './logo.png';
 import { Helmet } from 'react-helmet';
@@ -24,6 +24,7 @@ const Header = () => {
           <li><Link to="/sahalarimiz"><FaFutbol className="nav-icon" /><span className="nav-text">Sahalarımız</span></Link></li>
           <li><Link to="/hakkimizda"><FaInfoCircle className="nav-icon" /><span className="nav-text">Hakkımızda</span></Link></li>
           <li><Link to="/iletisim"><FaPhone className="nav-icon" /><span className="nav-text">İletişim</span></Link></li>
+          <li><Link to="/adminpanel/owner-fields"><FaTools className="footer-icon" /><span className="footer-text">Yönetici Paneli</span></Link></li>
         </ul>
       </nav>
     </header>

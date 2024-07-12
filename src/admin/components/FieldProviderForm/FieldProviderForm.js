@@ -4,7 +4,11 @@ import Switch from 'react-switch';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { getFieldProvider, createFieldProvider, updateFieldProvider, createField, updateField, deleteField, getUsers, getDistricts } from '../../../api';
+import Modal from 'react-modal';
+import { FaPen, FaTrash } from 'react-icons/fa';
 import './FieldProviderForm.css';
+
+Modal.setAppElement('#root');
 
 const FieldProviderForm = () => {
   const { id } = useParams();
@@ -30,6 +34,8 @@ const FieldProviderForm = () => {
   });
   const [customers, setCustomers] = useState([]);
   const [districts, setDistricts] = useState([]);
+  const [selectedField, setSelectedField] = useState(null);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -68,14 +74,15 @@ const FieldProviderForm = () => {
   const handleSwitchChange = (key, value) => {
     setProvider((prevProvider) => ({ ...prevProvider, [key]: value }));
   };
+
   const handleFieldSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (!provider.customerId || !provider.districtId) {
       toast.error('Müşteri ve İlçe alanları zorunludur.');
       return;
     }
-  
+
     try {
       const formData = new FormData();
       formData.append('name', provider.name);
@@ -93,7 +100,7 @@ const FieldProviderForm = () => {
       formData.append('lockerRoom', provider.lockerRoom);
       formData.append('availableHoursStart', provider.availableHoursStart);
       formData.append('availableHoursEnd', provider.availableHoursEnd);
-  
+
       const newFields = provider.fields.filter(field => field.isnew);
       const fields = newFields.map((field, index) => {
         const { id, images, ...rest } = field;
@@ -104,9 +111,9 @@ const FieldProviderForm = () => {
         });
         return { ...rest, images: images.map(image => (image instanceof File ? `${index}_${image.name}` : image)) };
       });
-  
+
       formData.append('fields', JSON.stringify(fields));
-  
+
       let savedProvider;
       if (isEdit) {
         savedProvider = await updateFieldProvider(id, formData);
@@ -115,14 +122,12 @@ const FieldProviderForm = () => {
         savedProvider = await createFieldProvider(formData);
         toast.success('Halı saha sağlayıcısı başarıyla eklendi.');
       }
-  
+
       navigate('/adminpanel');
     } catch (error) {
       toast.error('Bir hata oluştu: ' + error.message);
     }
   };
-  
-  
 
   const handleFieldAdd = () => {
     setProvider((prevProvider) => ({
@@ -141,7 +146,7 @@ const FieldProviderForm = () => {
       ],
     }));
   };
-  
+
   const handleFieldDelete = async (fieldId) => {
     if (isEdit && fieldId < 100000) {
       try {
@@ -161,7 +166,6 @@ const FieldProviderForm = () => {
       }));
     }
   };
-  
 
   const handleFieldUpdate = (fieldId, updatedField) => {
     setProvider((prevProvider) => ({
@@ -172,6 +176,52 @@ const FieldProviderForm = () => {
     }));
   };
 
+  const openModal = (field) => {
+    setSelectedField(field);
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+    setSelectedField(null);
+  };
+
+  const handleModalFieldChange = (e) => {
+    const { name, value } = e.target;
+    setSelectedField((prevField) => ({ ...prevField, [name]: value }));
+  };
+ 
+  
+  const saveModalField = async () => {
+    const formData = new FormData();
+  
+    // Tüm alanları FormData'ya ekle
+    Object.keys(selectedField).forEach(key => {
+      if (key !== 'images') {
+        formData.append(key, selectedField[key]);
+      }
+    });
+  
+    // Resimleri FormData'ya ekle
+    selectedField.images.forEach((image, index) => {
+      if (image instanceof File) {
+        formData.append('images', image, `${selectedField.id}_${index}_${image.name}`);
+      } else {
+        formData.append(`existingImages`, image);
+      }
+    });
+  
+    try {
+      await updateField(selectedField.id, formData);
+      handleFieldUpdate(selectedField.id, selectedField); // Local state update
+      toast.success('Halı saha başarıyla güncellendi.');
+    } catch (error) {
+      toast.error('Halı saha güncellenirken bir hata oluştu: ' + error.message);
+    }
+    closeModal();
+  };
+  
+  
   return (
     <div className="provider-form-container">
       <h2>Halı Saha Sağlayıcısı {isEdit ? 'Düzenle' : 'Ekle'}</h2>
@@ -256,57 +306,110 @@ const FieldProviderForm = () => {
         </div>
       </form>
       <h3>Halı Sahalar</h3>
-<button type="button" onClick={handleFieldAdd} className="add-field-button">Halı Saha Ekle</button>
-<table className="fields-table">
-  <thead>
-    <tr>
-      <th>İsim</th>
-      <th>En</th>
-      <th>Boy</th>
-      <th>Fiyat</th>
-      <th>Resimler</th>
-      <th>İşlemler</th>
-    </tr>
-  </thead>
-  <tbody>
-    {provider.fields?.map((field) => (
-      
-      <tr key={field.id || Date.now() + Math.random()}>
-        <td>
-          <input type="text" value={field.name} onChange={(e) => handleFieldUpdate(field.id, { ...field, name: e.target.value })} disabled={isEdit &&  !field.isnew} />
-        </td>
-        <td>
-          <input type="text" value={field.size} onChange={(e) => handleFieldUpdate(field.id, { ...field, size: e.target.value })} disabled={isEdit && !field.isnew} />
-        </td>
-        <td>
-          <input type="text" value={field.surface} onChange={(e) => handleFieldUpdate(field.id, { ...field, surface: e.target.value })} disabled={isEdit && !field.isnew} />
-        </td>
-        <td>
-          <input type="number" value={field.price} onChange={(e) => handleFieldUpdate(field.id, { ...field, price: e.target.value })} disabled={isEdit && !field.isnew} />
-        </td>
-        <td>
-          {(!isEdit || field.isnew) && (
-            <input type="file" multiple onChange={(e) => handleFieldUpdate(field.id, { ...field, images: Array.from(e.target.files) })} />
-          )}
-          <div className="image-thumbnails">
-            {field.images.map((image, index) => (
-              <div key={index} className="thumbnail">
-                <img 
-                  src={typeof image === 'string' ? image : URL.createObjectURL(image)} 
-                  alt={`thumbnail-${index}`} 
-                />
-              </div>
-            ))}
+      <button type="button" onClick={handleFieldAdd} className="add-field-button">Halı Saha Ekle</button>
+      <table className="fields-table">
+        <thead>
+          <tr>
+            <th>İsim</th>
+            <th>En</th>
+            <th>Boy</th>
+            <th>Fiyat</th>
+            <th>Resimler</th>
+            <th>İşlemler</th>
+          </tr>
+        </thead>
+        <tbody>
+          {provider.fields?.map((field) => (
+            <tr key={field.id || Date.now() + Math.random()}>
+              <td>
+                <input type="text" value={field.name} onChange={(e) => handleFieldUpdate(field.id, { ...field, name: e.target.value })} disabled={isEdit && !field.isnew} />
+              </td>
+              <td>
+                <input type="text" value={field.size} onChange={(e) => handleFieldUpdate(field.id, { ...field, size: e.target.value })} disabled={isEdit && !field.isnew} />
+              </td>
+              <td>
+                <input type="text" value={field.surface} onChange={(e) => handleFieldUpdate(field.id, { ...field, surface: e.target.value })} disabled={isEdit && !field.isnew} />
+              </td>
+              <td>
+                <input type="number" value={field.price} onChange={(e) => handleFieldUpdate(field.id, { ...field, price: e.target.value })} disabled={isEdit && !field.isnew} />
+              </td>
+              <td>
+                {(!isEdit || field.isnew) && (
+                  <input type="file" multiple onChange={(e) => handleFieldUpdate(field.id, { ...field, images: Array.from(e.target.files) })} />
+                )}
+                <div className="image-thumbnails">
+                  {field.images.map((image, index) => (
+                    <div key={index} className="thumbnail">
+                      <img
+                        src={typeof image === 'string' ? image : URL.createObjectURL(image)}
+                        alt={`thumbnail-${index}`}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </td>
+              <td>
+                
+                <button onClick={() => openModal(field)} className="edit-button">
+                  <FaPen/>
+                </button>
+                <button onClick={() => handleFieldDelete(field.id)} className="delete-button"><FaTrash/></button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <button type="submit" className="submit-button" onClick={handleFieldSubmit}>Kaydet</button>
+
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        contentLabel="Halı Saha Düzenle"
+        className="Modal"
+        overlayClassName="Overlay"
+      >
+        <h2>Halı Saha Düzenle</h2>
+        {selectedField && (
+          <div className="modal-content">
+            <div className="form-group">
+              <label>İsim</label>
+              <input type="text" name="name" value={selectedField.name} onChange={handleModalFieldChange} />
+            </div>
+            <div className="form-group">
+              <label>En</label>
+              <input type="text" name="size" value={selectedField.size} onChange={handleModalFieldChange} />
+            </div>
+            <div className="form-group">
+              <label>Boy</label>
+              <input type="text" name="surface" value={selectedField.surface} onChange={handleModalFieldChange} />
+            </div>
+            <div className="form-group">
+              <label>Fiyat</label>
+              <input type="number" name="price" value={selectedField.price} onChange={handleModalFieldChange} />
+            </div>
+            <div className="form-group">
+            <label>Resimler</label>
+            <input
+              type="file"
+              multiple
+              onChange={(e) => setSelectedField({ ...selectedField, images: Array.from(e.target.files) })}
+            />
+            <div className="image-thumbnails">
+              {selectedField.images.map((image, index) => (
+                <div key={index} className="thumbnail">
+                  <img
+                    src={typeof image === 'string' ? image : URL.createObjectURL(image)}
+                    alt={`thumbnail-${index}`}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
-        </td>
-        <td>
-          <button onClick={() => handleFieldDelete(field.id)} className="delete-button">Sil</button>
-        </td>
-      </tr>
-    ))}
-  </tbody>
-</table>
-<button type="submit" className="submit-button" onClick={handleFieldSubmit}>Kaydet</button>
+            <button onClick={saveModalField} className="save-button">Kaydet</button>
+            <button onClick={closeModal} className="cancel-button">İptal</button>
+          </div>
+        )}
+      </Modal>
     </div>
   );
 };

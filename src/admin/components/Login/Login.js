@@ -28,7 +28,8 @@ const Login = ({ setIsAuthenticated, setUserType }) => {
       const { token, userType } = await loginUser(username, password);
       const decodedToken = jwtDecode(token);
       const userId = decodedToken.id;
-
+      console.log(decodedToken);
+      localStorage.setItem("namesurname",decodedToken.nameSurname);
       if (rememberMe) {
         localStorage.setItem('username', username);
         localStorage.setItem('password', password);

@@ -5,6 +5,7 @@
   border-radius: 10px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
   color: #ffffff;
+  max-width: 100%;
 }
 
 .admin-field-schedule h2 {
@@ -33,11 +34,12 @@
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
+  overflow-x: auto;
 }
 
 .admin-schedule-table th,
 .admin-schedule-table td {
-  padding: 2px;
+  padding: 8px;
   border: 1px solid #ddd;
   text-align: center;
 }
@@ -53,9 +55,37 @@
 
 .admin-hour-cell {
   min-height: 50px;
-  min-width: 150px;
+  min-width: 100px; /* Decreased min-width for mobile compatibility */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .admin-field-schedule {
+    padding: 10px;
+    overflow: auto;
+    margin: 10px;
+  }
+
+  .admin-date-controls button {
+    font-size: 20px;
+    margin: 5px 0;
+  }
+  .admin-schedule-table{
+    overflow: auto;
+    max-width: 100vw;
+  }
+  .admin-schedule-table th,
+  .admin-schedule-table td {
+    padding: 4px;
+    font-size: 11px; /* Reduced font size for mobile */
+  }
+
+  .admin-hour-cell {
+    min-height: 30px; /* Reduced min-height for mobile */
+    min-width: 10px;  /* Reduced min-width for mobile */
+  }
+
 }

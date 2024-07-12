@@ -11,7 +11,7 @@ const Contact = () => {
     </Helmet>
       <div className="contact-info">
         <h1>İletişim</h1>
-        <p>Halı sahanızı listelemek için bizi arayabilirsiniz. <br/>Alim ERGÜN <br/> İletişim: <a href="tel:+905077341376">(+90) 507 734 1376</a></p>
+        <p>Halı sahanızı listelemek için bizi arayabilirsiniz. <br/>Alim ERGUN <br/> İletişim: <a href="tel:+905077341376">(+90) 507 734 1376</a></p>
         <address>
         </address>
         <div className="social-media">

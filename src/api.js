@@ -12,8 +12,6 @@ export const loginUser = async (username, password) => {
   }
 };
 
-
-// User API calls
 export const getUsers = async () => {
   try {
     const response = await axios.get(`${API_BASE_URL}/users`);
@@ -53,8 +51,6 @@ export const deleteUser = async (id) => {
     throw error;
   }
 };
-
-// District API calls
 export const getDistricts = async () => {
   try {
     const response = await axios.get(`${API_BASE_URL}/districts`);
@@ -205,16 +201,20 @@ export const createField = async (field) => {
     throw error;
   }
 };
-
 export const updateField = async (id, field) => {
   try {
-    const response = await axios.put(`${API_BASE_URL}/fields/${id}`, field);
+    const response = await axios.put(`${API_BASE_URL}/fields/${id}`, field, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
     return response.data;
   } catch (error) {
     console.error('Error updating field:', error);
     throw error;
   }
 };
+
 
 export const deleteField = async (id) => {
   try {

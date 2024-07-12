@@ -31,6 +31,7 @@ function AdminApp() {
     localStorage.removeItem('userId');
     localStorage.removeItem('username');
     localStorage.removeItem('password');
+    localStorage.removeItem('namesurname');
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('userType');
     setIsAuthenticated(false);

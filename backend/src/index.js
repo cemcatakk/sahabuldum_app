@@ -64,8 +64,9 @@ router.post('/login', async (req, res) => {
         id: user.id,
         userType: user.type,
         availableHoursStart: fieldProvider ? fieldProvider.availableHoursStart : '00:00',
-        availableHoursEnd: fieldProvider ? fieldProvider.availableHoursEnd : '23:59'
-      }, 'SECRET_KEY', { expiresIn: '1h' });
+        availableHoursEnd: fieldProvider ? fieldProvider.availableHoursEnd : '23:59',
+        nameSurname: user.firstName + " " + user.lastName
+      }, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9', { expiresIn: '1h' });
       res.json({ token, userType: user.type });
     } else {
       res.status(401).json({ error: 'Invalid credentials' });
@@ -341,11 +342,16 @@ router.get('/fields', async (req, res) => {
 });
 
 
-
-router.put('/fields/:id', async (req, res) => {
+router.put('/fields/:id', upload.array('images', 50), async (req, res) => {
   const { id } = req.params;
+  const { images, ...fieldData } = req.body;
+  
   try {
-    await Field.update(req.body, { where: { id } });
+    const imagePaths = req.files.map(file => `/uploads/${file.filename}`);
+
+    const allImages = images ? JSON.parse(images).concat(imagePaths) : imagePaths;
+
+    await Field.update({ ...fieldData, images: allImages }, { where: { id } });
     res.json({ message: 'Field updated successfully' });
   } catch (err) {
     res.status(500).json({ error: err.message });

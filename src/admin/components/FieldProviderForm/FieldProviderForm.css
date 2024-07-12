@@ -4,7 +4,7 @@
   color: var(--text-color);
   background-color: rgba(24, 24, 24, 0.208);
   padding: 20px;
-  max-width: 1500px; /* Max genişlik ayarlandı */
+  max-width: 100%; /* Tam genişlikte kalması için ayarlandı */
 }
 
 .provider-form-container h2,
@@ -21,7 +21,7 @@
 }
 
 .form-group {
-  flex: 1 1 calc(25% - 10px);
+  flex: 1 1 calc(50% - 10px); /* Daha fazla yer açmak için genişlik arttırıldı */
   margin: 5px;
 }
 
@@ -52,7 +52,7 @@
 }
 
 .hours-container input {
-  width: 45%;
+  width: calc(50% - 10px); /* Genişlik küçültüldü */
   margin: 0 5px;
 }
 
@@ -71,7 +71,10 @@
 
 .add-field-button,
 .submit-button,
-.delete-button {
+.delete-button,
+.edit-button,
+.save-button,
+.cancel-button {
   width: 100%;
   padding: 10px;
   border: none;
@@ -80,6 +83,10 @@
   color: white;
   cursor: pointer;
   margin-top: 10px;
+}
+
+.save-button {
+  background-color: orange;
 }
 
 .delete-button {
@@ -96,7 +103,6 @@
 
 .fields-table {
   width: 100%;
-  min-width: 1200px;
   margin-top: 20px;
   border-collapse: collapse;
   table-layout: auto;
@@ -107,7 +113,7 @@
 
 .fields-table th,
 .fields-table td {
-  padding: 12px;
+  padding: 8px; /* Padding küçültüldü */
   border: 1px solid #ddd;
   text-align: center;
   vertical-align: middle;
@@ -147,4 +153,126 @@
   object-fit: cover;
   border-radius: 8px;
   border: 2px solid #ddd;
+}
+
+.Modal {
+  background: rgb(0, 0, 0);
+  padding: 50px;
+  border-radius: 10px;
+  max-width: 500px;
+  margin: auto;
+  color: white;
+}
+
+.Overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-content .form-group {
+  margin-bottom: 20px;
+}
+
+/* Mobil ve tablet cihazlar için medya sorguları */
+@media (max-width: 768px) {
+  .provider-form-container {
+    padding: 10px;
+    margin: 0;
+  }
+
+  h2{
+    font-size: 17px !important;
+  }
+  .form-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .form-group {
+    flex: 1 1 100%;
+    margin: 5px 0;
+    margin-bottom: 0;
+  }
+
+  .hours-container input {
+    width: calc(50% - 10px);
+  }
+  .hours-container{
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin: 0;
+  }
+  .switch-group {
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    margin: 0;
+    max-width: 50%;
+  }
+
+  .switch-group label {
+    margin-bottom: 10px;
+  }
+
+  .fields-table {
+    width: 100%;
+    min-width: 100vw;
+    overflow-x:scroll;
+  }
+
+  .fields-table th,
+  .fields-table td {
+    font-size: 10px;
+    padding: 0;
+    margin: 0;
+  }
+
+
+  .fields-table td input{
+    max-width: 40px;
+  }
+
+  .fields-table th {
+    font-size: 14px;
+    padding: 0;
+  }
+
+  .image-thumbnails {
+    justify-content: flex-start;
+  }
+
+  .thumbnail img {
+    width: 50px;
+    height: 50px;
+  }
+
+  .add-field-button,
+  .submit-button,
+  .delete-button,
+  .edit-button,
+  .save-button,
+  .cancel-button {
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  .Modal {
+    padding: 20px;
+    max-width: 90%;
+  }
+
 }

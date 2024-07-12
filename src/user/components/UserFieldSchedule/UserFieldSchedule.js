@@ -42,11 +42,11 @@ const UserFieldSchedule = ({ fieldId }) => {
       for (let i = startHour; i < 24; i++) {
         hoursArray.push(i);
       }
-      for (let i = 0; i <= endHour; i++) {
+      for (let i = 0; i < endHour; i++) {
         hoursArray.push(i);
       }
     } else {
-      for (let i = startHour; i <= endHour; i++) {
+      for (let i = startHour; i < endHour; i++) {
         hoursArray.push(i);
       }
     }
