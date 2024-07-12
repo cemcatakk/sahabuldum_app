@@ -1,9 +1,14 @@
 import React from 'react';
 import './Contact.css';
+import { Helmet } from 'react-helmet';
 
 const Contact = () => {
   return (
     <div className="contact">
+    <Helmet>
+      <title>İletişim | Sahabuldum</title>
+      <meta name="description" content="Sahabuldum ile iletişime geçin. Halı sahanızı listelemek veya herhangi bir soru sormak için bizimle iletişime geçin." />
+    </Helmet>
       <div className="contact-info">
         <h1>İletişim</h1>
         <p>Halı sahanızı listelemek için bizi arayabilirsiniz. <br/>Alim ERGÜN <br/> İletişim: <a href="tel:+905077341376">(+90) 507 734 1376</a></p>

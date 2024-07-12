@@ -34,7 +34,7 @@ const UserFieldSchedule = ({ fieldId }) => {
     const endHour = parseInt(end.split(':')[0]);
     const hoursArray = [];
 
-    if (startHour === 0 && endHour === 0) {
+    if (startHour === endHour) {
       for (let i = 0; i < 24; i++) {
         hoursArray.push(i);
       }

@@ -8,9 +8,26 @@ const { User, District, FieldProvider, Field, Schedule, sequelize } = require('.
 const Sequelize = require('sequelize')
 
 const app = express();
-const PORT = 3000;
+const router = express.Router();
+const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+const allowedOrigins = ['https://sahabuldum.com.tr', 'http://localhost:3000'];
+
+const corsOptions = {
+ origin: function (origin, callback) {
+    if (allowedOrigins.includes(origin) || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+  optionsSuccessStatus: 204
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 app.use(bodyParser.json());
 app.use('/uploads', express.static('uploads'));
 
@@ -37,7 +54,7 @@ const createAdminUser = async () => {
 
 // Call the function to create the admin user
 createAdminUser();
-app.post('/login', async (req, res) => {
+router.post('/login', async (req, res) => {
   const { username, password } = req.body;
   try {
     const user = await User.findOne({ where: { username } });
@@ -61,7 +78,7 @@ app.post('/login', async (req, res) => {
 
 
 // User routes
-app.post('/users', async (req, res) => {
+router.post('/users', async (req, res) => {
   try {
     const user = await User.create(req.body);
     res.status(201).json(user);
@@ -70,7 +87,7 @@ app.post('/users', async (req, res) => {
   }
 });
 
-app.get('/users', async (req, res) => {
+router.get('/users', async (req, res) => {
   try {
     const users = await User.findAll();
     res.json(users);
@@ -79,7 +96,7 @@ app.get('/users', async (req, res) => {
   }
 });
 
-app.put('/users/:id', async (req, res) => {
+router.put('/users/:id', async (req, res) => {
   try {
     const user = await User.findByPk(req.params.id);
     if (user) {
@@ -93,7 +110,7 @@ app.put('/users/:id', async (req, res) => {
   }
 });
 
-app.delete('/users/:id', async (req, res) => {
+router.delete('/users/:id', async (req, res) => {
   try {
     const user = await User.findByPk(req.params.id);
     if (user) {
@@ -108,7 +125,7 @@ app.delete('/users/:id', async (req, res) => {
 });
 
 // District routes
-app.post('/districts', async (req, res) => {
+router.post('/districts', async (req, res) => {
   try {
     const district = await District.create(req.body);
     res.status(201).json(district);
@@ -117,7 +134,7 @@ app.post('/districts', async (req, res) => {
   }
 });
 
-app.get('/districts', async (req, res) => {
+router.get('/districts', async (req, res) => {
   try {
     const districts = await District.findAll();
     res.json(districts);
@@ -126,7 +143,7 @@ app.get('/districts', async (req, res) => {
   }
 });
 
-app.put('/districts/:id', async (req, res) => {
+router.put('/districts/:id', async (req, res) => {
   try {
     const district = await District.findByPk(req.params.id);
     if (district) {
@@ -140,7 +157,7 @@ app.put('/districts/:id', async (req, res) => {
   }
 });
 
-app.delete('/districts/:id', async (req, res) => {
+router.delete('/districts/:id', async (req, res) => {
   try {
     const district = await District.findByPk(req.params.id);
     if (district) {
@@ -154,7 +171,7 @@ app.delete('/districts/:id', async (req, res) => {
   }
 });
 
-app.post('/field-providers', upload.array('images', 50), async (req, res) => {
+router.post('/field-providers', upload.array('images', 50), async (req, res) => {
   const { fields, ...fieldProviderData } = req.body;
 
   try {
@@ -169,7 +186,7 @@ app.post('/field-providers', upload.array('images', 50), async (req, res) => {
       const { id, images, ...fieldData } = field;
       const imagePaths = req.files
         .filter(file => file.originalname.startsWith(`${i}_`))
-        .map(file => `${req.protocol}://${req.get('host')}/uploads/${file.filename}`);
+        .map(file => `/uploads/${file.filename}`);
       await Field.create({ ...fieldData, images: imagePaths, providerId, ownerId });
     }
 
@@ -179,7 +196,7 @@ app.post('/field-providers', upload.array('images', 50), async (req, res) => {
   }
 });
 
-app.get('/field-providers', async (req, res) => {
+router.get('/field-providers', async (req, res) => {
   try {
     const fieldProviders = await FieldProvider.findAll({
       include: [
@@ -194,7 +211,7 @@ app.get('/field-providers', async (req, res) => {
   }
 });
 
-app.get('/field-providers/:id', async (req, res) => {
+router.get('/field-providers/:id', async (req, res) => {
   const { id } = req.params;
   try {
     const fieldProvider = await FieldProvider.findByPk(id, {
@@ -209,12 +226,13 @@ app.get('/field-providers/:id', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-app.put('/field-providers/:id', upload.array('images', 50), async (req, res) => {
+
+
+router.put('/field-providers/:id', upload.array('images', 50), async (req, res) => {
   const { fields, ...fieldProviderData } = req.body;
   const { id } = req.params;
 
   try {
-    // Halı saha sağlayıcısını güncelle
     await FieldProvider.update(fieldProviderData, { where: { id } });
 
     const parsedFields = JSON.parse(fields);
@@ -224,9 +242,8 @@ app.put('/field-providers/:id', upload.array('images', 50), async (req, res) => 
       const { images, ...fieldData } = field;
       const newImagePaths = req.files
         .filter(file => file.originalname.startsWith(`${i}_`))
-        .map(file => `${req.protocol}://${req.get('host')}/uploads/${file.filename}`);
+        .map(file => `/uploads/${file.filename}`);
 
-      // Yeni saha oluştur
       await Field.create({ ...fieldData, images: newImagePaths, providerId: id, ownerId: fieldProviderData.customerId });
     }
 
@@ -237,10 +254,7 @@ app.put('/field-providers/:id', upload.array('images', 50), async (req, res) => 
 });
 
 
-
-
-
-app.delete('/field-providers/:id', async (req, res) => {
+router.delete('/field-providers/:id', async (req, res) => {
   const { id } = req.params;
   try {
     const provider = await FieldProvider.findByPk(id);
@@ -257,7 +271,7 @@ app.delete('/field-providers/:id', async (req, res) => {
   }
 });
 
-app.post('/fields', async (req, res) => {
+router.post('/fields', async (req, res) => {
   try {
     const field = await Field.create(req.body);
     res.status(201).json(field);
@@ -265,7 +279,7 @@ app.post('/fields', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-app.get('/fields/:id', async (req, res) => {
+router.get('/fields/:id', async (req, res) => {
   const { id } = req.params;
   try {
     const field = await Field.findByPk(id, {
@@ -281,7 +295,7 @@ app.get('/fields/:id', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-app.get('/all-fields', async (req, res) => {
+router.get('/all-fields', async (req, res) => {
   try {
     const fields = await Field.findAll({
       include: [
@@ -303,7 +317,7 @@ app.get('/all-fields', async (req, res) => {
 
 
 
-app.get('/fields', async (req, res) => {
+router.get('/fields', async (req, res) => {
   const { ownerId } = req.query;
   try {
     const fields = await Field.findAll({
@@ -328,7 +342,7 @@ app.get('/fields', async (req, res) => {
 
 
 
-app.put('/fields/:id', async (req, res) => {
+router.put('/fields/:id', async (req, res) => {
   const { id } = req.params;
   try {
     await Field.update(req.body, { where: { id } });
@@ -338,7 +352,7 @@ app.put('/fields/:id', async (req, res) => {
   }
 });
 
-app.delete('/fields/:id', async (req, res) => {
+router.delete('/fields/:id', async (req, res) => {
   const { id } = req.params;
   try {
     await Field.destroy({ where: { id } });
@@ -348,7 +362,7 @@ app.delete('/fields/:id', async (req, res) => {
   }
 });
 
-app.get('/schedules', async (req, res) => {
+router.get('/schedules', async (req, res) => {
   const { fieldId, startDate } = req.query;
   try {
     const schedules = await Schedule.findAll({
@@ -366,7 +380,7 @@ app.get('/schedules', async (req, res) => {
   }
 });
 
-app.put('/schedules', async (req, res) => {
+router.put('/schedules', async (req, res) => {
   try {
     const schedules = req.body;
     for (const schedule of schedules) {
@@ -379,7 +393,7 @@ app.put('/schedules', async (req, res) => {
 });
 
 
-app.put('/schedules/:id', async (req, res) => {
+router.put('/schedules/:id', async (req, res) => {
   try {
     const schedule = await Schedule.findByPk(req.params.id);
     if (schedule) {
@@ -394,7 +408,7 @@ app.put('/schedules/:id', async (req, res) => {
 });
 
 
-app.delete('/schedules', async (req, res) => {
+router.delete('/schedules', async (req, res) => {
   try {
     const { fieldId, date, hour } = req.body;
     await Schedule.destroy({
@@ -410,7 +424,8 @@ app.delete('/schedules', async (req, res) => {
   }
 });
 
-
+app.use('/api', router);
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
+

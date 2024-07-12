@@ -2,11 +2,16 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaHome, FaFutbol, FaInfoCircle, FaPhone } from 'react-icons/fa';
 import './Header.css';
-import logo from './logo.png'; // Logo dosyasını ekleyin
+import logo from './logo.png';
+import { Helmet } from 'react-helmet';
 
 const Header = () => {
   return (
     <header className="header">
+       <Helmet>
+        <title>Sahabuldum | Halı Saha Arama ve Kiralama</title>
+        <meta name="description" content="Sahabuldum ile İzmir ve çevresinde halı saha arayın ve kiralayın. En iyi halı saha deneyimi için Sahabuldum." />
+      </Helmet>
       <div className="logo">
         <Link to="/">
           <img src={logo} alt="Sahabuldum" />
@@ -26,3 +31,4 @@ const Header = () => {
 };
 
 export default Header;
+

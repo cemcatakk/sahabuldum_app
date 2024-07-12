@@ -1,74 +1,52 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import FieldCard from '../../components/FieldCard/FieldCard';
+import { getAllFields } from '../../../api'; 
 import './Fields.css';
-
-const fields = [
-  {
-    id: 1,
-    name: 'Halı Saha 1',
-    number: '1',
-    size: '500m2',
-    surface: 'Çim',
-    contactname: 'Müşteri 1',
-    city: 'İzmir',
-    district: 'Konak',
-    address: 'Adres 1',
-    addressdescription: 'Adres tarifi 1',
-    contact1: '1234567890',
-    contact2: '0987654321',
-    rentalshoes: true,
-    rentalgloves: false,
-    cafe: true,
-    shower: true,
-    lockerroom: true,
-    availablehoursstart: '09:00',
-    availablehoursend: '22:00',
-    images: ['image1.jpg', 'image1.jpg'],
-    price: 100,
-  },
-  {
-    id: 2,
-    name: 'Halı Saha 2',
-    number: '1',
-    size: '500m2',
-    surface: 'Çim',
-    contactname: 'Müşteri 1',
-    city: 'İzmir',
-    district: 'Konak',
-    address: 'Adres 1',
-    addressdescription: 'Adres tarifi 1',
-    contact1: '1234567890',
-    contact2: '0987654321',
-    rentalshoes: true,
-    rentalgloves: false,
-    cafe: true,
-    shower: true,
-    lockerroom: true,
-    availablehoursstart: '09:00',
-    availablehoursend: '22:00',
-    images: ['image1.jpg', 'image1.jpg'],
-    price: 150,
-  },
-  // Diğer sahaları buraya ekleyebilirsiniz.
-];
+import { Helmet } from 'react-helmet';
 
 const Fields = () => {
+  const [fields, setFields] = useState([]);
   const [selectedDistrict, setSelectedDistrict] = useState('');
-  
-  const districts = [...new Set(fields.map(field => field.district))];
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchFields = async () => {
+      try {
+        const fetchedFields = await getAllFields();
+        setFields(fetchedFields);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching fields:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchFields();
+  }, []);
 
   const handleDistrictChange = (event) => {
     setSelectedDistrict(event.target.value);
   };
 
+  const districts = [...new Set(fields.map(field => field.FieldProvider.district.name))];
+
   const filteredFields = selectedDistrict 
-    ? fields.filter(field => field.district === selectedDistrict) 
+    ? fields.filter(field => field.FieldProvider.district.name === selectedDistrict) 
     : fields;
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="fields">
+      <Helmet>
+        <title>Sahalarımız | Sahabuldum</title>
+        <meta name="description" content="Sahabuldum'daki tüm halı sahaları keşfedin. İzmir ve çevresindeki halı sahaları filtreleyerek arayın ve kiralayın." />
+      </Helmet>
       <div className="filter">
-İlçe Seçiniz:        <select value={selectedDistrict} onChange={handleDistrictChange}>
+        İlçe Seçiniz: 
+        <select value={selectedDistrict} onChange={handleDistrictChange}>
           <option value="">Tüm İlçeler</option>
           {districts.map((district, index) => (
             <option key={index} value={district}>

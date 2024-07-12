@@ -1,9 +1,14 @@
 import React from 'react';
 import './About.css';
+import { Helmet } from 'react-helmet';
 
 const About = () => {
   return (
     <div className="about">
+    <Helmet>
+      <title>Hakkımızda | Sahabuldum</title>
+      <meta name="description" content="Sahabuldum hakkında bilgi edinin. Misyonumuz, vizyonumuz ve halı saha kiralama süreçlerimiz hakkında detaylar." />
+    </Helmet>
       <h1>Hakkımızda</h1>
       <section className="mission-vision">
         <h2>Misyonumuz</h2>

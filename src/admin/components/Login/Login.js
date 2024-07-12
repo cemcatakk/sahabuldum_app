@@ -42,7 +42,12 @@ const Login = ({ setIsAuthenticated, setUserType }) => {
       }
       setIsAuthenticated(true);
       setUserType(userType);
-      navigate('/adminpanel');
+	if(userType === 'admin'){
+        navigate('/adminpanel/owner-fields');
+      }
+      else{
+        navigate('/adminpanel');
+      }
     } catch (error) {
       setError('Kullanıcı adı veya şifre yanlış');
     }

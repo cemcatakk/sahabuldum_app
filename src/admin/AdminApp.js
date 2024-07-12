@@ -52,11 +52,7 @@ function AdminApp() {
                 <Route path="/field-schedule/:fieldId" element={<FieldSchedule />} />
               </>
             ) : (
-              <>
-                <Route path="/" element={<AdminDashboard />} />
-                <Route path="/add-provider" element={<FieldProviderForm />} />
-                <Route path="/edit-provider/:id" element={<FieldProviderForm />} />
-                <Route path="/owner-dashboard" element={<FieldOwnerDashboard />} />
+		 <>
                 <Route path="/owner-fields" element={<OwnerFields />} />
                 <Route path="/field-schedule/:fieldId" element={<FieldSchedule />} />
               </>
